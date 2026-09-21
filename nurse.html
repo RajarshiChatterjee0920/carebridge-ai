@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nurse Monitoring Portal — CareBridge AI</title>
+  <link rel="stylesheet" href="nurse.css" />
+</head>
+<body>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="nb-header">
+    <div class="nb-header__brand">
+      <span class="nb-logo" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 4c8.837 0 16 7.163 16 16s-7.163 16-16 16S4 28.837 4 20 11.163 4 20 4Z" stroke="currentColor" stroke-width="2"/>
+          <path d="M20 12v16M12 20h16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <div class="nb-header__titles">
+        <p class="nb-header__product">CareBridge AI</p>
+        <h1 class="nb-header__module">Nurse Monitoring Portal</h1>
+      </div>
+    </div>
+
+    <div class="nb-header__meta">
+      <div class="nb-header__nurse">
+        <span class="nb-header__label">Logged in as</span>
+        <span class="nb-header__nurse-id" id="nurseIdDisplay">NURSE001</span>
+      </div>
+      <div class="nb-header__date" id="currentDateDisplay"></div>
+      <button class="nb-btn nb-btn--ghost" id="logoutBtn" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Log out
+      </button>
+    </div>
+  </header>
+
+  <!-- ===================== MAIN LAYOUT ===================== -->
+  <main class="nb-main">
+
+    <!-- ---------- LEFT: PATIENT LIST ---------- -->
+    <section class="nb-panel nb-panel--list" aria-label="Patient list">
+      <div class="nb-panel__head">
+        <h2>Admitted Patients</h2>
+        <span class="nb-count" id="patientCount">0</span>
+      </div>
+
+      <div class="nb-search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+          <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Search by name or Patient ID" autocomplete="off" />
+      </div>
+
+      <div class="nb-list__scroll" id="patientListWrap">
+        <div class="nb-state nb-state--loading" id="loadingState">
+          <span class="nb-spinner" aria-hidden="true"></span>
+          <p>Loading patient records…</p>
+        </div>
+
+        <div class="nb-state nb-state--empty" id="emptyState" hidden>
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          <p>No admitted patients yet</p>
+          <span>New admissions will appear here automatically.</span>
+        </div>
+
+        <div class="nb-state nb-state--error" id="errorState" hidden>
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          <p>Couldn't load patient records</p>
+          <span id="errorMessage">Please check your connection and try again.</span>
+          <button class="nb-btn nb-btn--secondary" id="retryBtn" type="button">Retry</button>
+        </div>
+
+        <table class="nb-table" id="patientTable" hidden>
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>Department</th>
+              <th>Ward / Bed</th>
+              <th>Doctor</th>
+              <th>Type</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="patientTableBody"></tbody>
+        </table>
+
+        <div class="nb-state nb-state--empty" id="noResultsState" hidden>
+          <p>No matches found</p>
+          <span>Try a different name or Patient ID.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- RIGHT: PATIENT DETAILS ---------- -->
+    <section class="nb-panel nb-panel--detail" aria-label="Patient details">
+
+      <div class="nb-detail__placeholder" id="detailPlaceholder">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <p>Select a patient to view their record</p>
+        <span>Patient details, care plan and daily checks will appear here.</span>
+      </div>
+
+      <div class="nb-detail" id="detailContent" hidden>
+
+        <!-- Patient summary -->
+        <div class="nb-card nb-card--summary">
+          <div class="nb-card__row nb-card__row--top">
+            <div>
+              <h2 id="detailName">—</h2>
+              <span class="nb-pid" id="detailPid">—</span>
+            </div>
+            <span class="nb-tag" id="detailAdmissionType">—</span>
+          </div>
+
+          <div class="nb-grid nb-grid--facts">
+            <div class="nb-fact"><span>Age / Gender</span><strong id="detailAgeGender">—</strong></div>
+            <div class="nb-fact"><span>Blood Group</span><strong id="detailBloodGroup">—</strong></div>
+            <div class="nb-fact"><span>Department</span><strong id="detailDepartment">—</strong></div>
+            <div class="nb-fact"><span>Ward / Bed</span><strong id="detailWardBed">—</strong></div>
+            <div class="nb-fact"><span>Assigned Doctor</span><strong id="detailDoctor">—</strong></div>
+            <div class="nb-fact"><span>Admission Date</span><strong id="detailAdmissionDate">—</strong></div>
+          </div>
+
+          <div class="nb-complaint">
+            <span>Primary complaint / reason for admission</span>
+            <p id="detailComplaint">—</p>
+          </div>
+
+          <div class="nb-guardian">
+            <div class="nb-guardian__info">
+              <span>Guardian</span>
+              <p><strong id="detailGuardianName">—</strong> (<span id="detailGuardianRelation">—</span>) · <span id="detailGuardianPhone">—</span></p>
+            </div>
+            <span class="nb-badge nb-badge--pending" id="guardianSmsStatus">Guardian update: pending / SMS integration coming next</span>
+          </div>
+        </div>
+
+        <!-- Care plan -->
+        <div class="nb-card nb-card--careplan">
+          <div class="nb-card__head">
+            <h3>Doctor's Orders & Routine Tests</h3>
+            <span class="nb-badge nb-badge--muted">Live from Doctor Dashboard</span>
+          </div>
+          <div class="nb-complaint" style="margin-top: 12px;">
+            <p id="detailCarePlan" style="white-space: pre-wrap; font-weight: 500; color: #1f2d2b;">—</p>
+          </div>
+        </div>
+
+        <!-- Daily routine check form -->
+        <div class="nb-card nb-card--form">
+          <div class="nb-card__head">
+            <h3>Daily Routine Check</h3>
+            <span class="nb-card__hint">Recorded against <strong id="formPatientLabel">—</strong></span>
+          </div>
+
+          <form id="vitalsForm" novalidate>
+            <div class="nb-grid nb-grid--form">
+              <div class="nb-field">
+                <label for="heartRate">Heart Rate (bpm)</label>
+                <input type="number" id="heartRate" name="heartRate" min="0" max="300" inputmode="numeric" />
+                <span class="nb-field__error" data-error-for="heartRate"></span>
+              </div>
+              <div class="nb-field">
+                <label for="systolicBp">Systolic BP (mmHg)</label>
+                <input type="number" id="systolicBp" name="systolicBp" min="0" max="300" inputmode="numeric" />
+                <span class="nb-field__error" data-error-for="systolicBp"></span>
+              </div>
+              <div class="nb-field">
+                <label for="diastolicBp">Diastolic BP (mmHg)</label>
+                <input type="number" id="diastolicBp" name="diastolicBp" min="0" max="200" inputmode="numeric" />
+                <span class="nb-field__error" data-error-for="diastolicBp"></span>
+              </div>
+              <div class="nb-field">
+                <label for="spo2">SpO₂ (%)</label>
+                <input type="number" id="spo2" name="spo2" min="0" max="100" inputmode="numeric" />
+                <span class="nb-field__error" data-error-for="spo2"></span>
+              </div>
+              <div class="nb-field">
+                <label for="temperature">Temperature (°F)</label>
+                <input type="number" id="temperature" name="temperature" step="0.1" min="80" max="115" inputmode="decimal" />
+                <span class="nb-field__error" data-error-for="temperature"></span>
+              </div>
+              <div class="nb-field">
+                <label for="bloodSugar">Blood Sugar (mg/dL)</label>
+                <input type="number" id="bloodSugar" name="bloodSugar" min="0" max="800" inputmode="numeric" />
+                <span class="nb-field__error" data-error-for="bloodSugar"></span>
+              </div>
+            </div>
+
+            <div class="nb-field nb-field--full">
+              <label for="nurseNotes">Nurse Notes</label>
+              <textarea id="nurseNotes" name="nurseNotes" rows="3" placeholder="Observations, patient response, anything to flag…"></textarea>
+            </div>
+
+            <div class="nb-form__footer">
+              <span class="nb-form__status" id="saveStatus" role="status" aria-live="polite"></span>
+              <button type="submit" class="nb-btn nb-btn--primary" id="saveCheckBtn">Save Daily Check</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="nurse.js"></script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CareBridge AI — Doctor Portal</title>
+<link rel="stylesheet" href="doctor.css" />
+<!-- Supabase JS library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <div class="doctor-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-icon">🏥</span>
+        <span class="brand-name">CareBridge <span>AI</span></span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-section="overview">
+          <span class="nav-icon">📅</span> Dashboard / Schedule
+        </button>
+        <button class="nav-item" data-section="patients">
+          <span class="nav-icon">🧑‍🤝‍🧑</span> My Patients
+        </button>
+      </nav>
+
+      <button id="logoutBtn" class="logout-btn">
+        <span class="nav-icon">🚪</span> Logout
+      </button>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <header class="topbar">
+        <div>
+          <h1>Doctor Dashboard</h1>
+          <p class="subtitle">Patient Rounds &amp; Clinical Management</p>
+        </div>
+        <div class="doctor-id-badge">Logged in as <strong id="doctorNameBadge">—</strong></div>
+      </header>
+
+      <div id="statusBanner" class="status-banner"></div>
+
+      <!-- ================= OVERVIEW / SCHEDULE ================= -->
+      <section id="overview" class="content-section active-section">
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-icon teal-bg">🧑‍🤝‍🧑</div>
+            <div>
+              <p class="summary-label">Assigned Patients</p>
+              <h2 id="statAssignedPatients">0</h2>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon red-bg">🚨</div>
+            <div>
+              <p class="summary-label">Critical Cases</p>
+              <h2 id="statCriticalCases">0</h2>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon green-bg">✅</div>
+            <div>
+              <p class="summary-label">Rounds Today</p>
+              <h2 id="statRoundsToday">0</h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Today's Schedule</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Patient</th>
+                  <th>Type</th>
+                  <th>Location</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="scheduleTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MY PATIENTS (LIST) ================= -->
+      <section id="patients" class="content-section">
+        <div class="card">
+          <div class="card-header-row">
+            <h3 class="card-title">My Patients</h3>
+            <button class="qa-btn small" id="refreshPatientsBtn">🔄 Refresh</button>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Patient ID</th>
+                  <th>Name</th>
+                  <th>Bed</th>
+                  <th>Guardian</th>
+                  <th>Guardian Phone</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="patientsTableBody">
+                <tr><td colspan="7" class="muted-text">Loading patients...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PATIENT DETAIL (HIDDEN UNTIL A PATIENT IS SELECTED) ================= -->
+      <section id="patientDetail" class="content-section">
+        <button class="back-btn" id="backToPatientsBtn">← Back to My Patients</button>
+
+        
+          <div class="card patient-header-card">
+          <div>
+            <h2 id="detailPatientName">—</h2>
+            <p class="muted-text" id="detailPatientMeta">—</p>
+          </div>
+          <span class="status-pill status-active" id="detailPatientStatus">Active</span>
+        </div>
+
+        <!-- ROUTINE TESTS / ORDERS -->
+        <div class="card">
+          <h3 class="card-title">Daily Routine Tests & Nursing Orders</h3>
+          <p class="muted-text">Set the daily monitoring requirements. The assigned nurse will see these instructions.</p>
+          <form id="routineTestsForm" style="margin-top: 12px;">
+            <textarea id="routineTestsInput" rows="3" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); font-family: inherit; margin-bottom: 10px; resize: vertical; font-size: 14px;" placeholder="e.g., BP every 4 hours, Blood Sugar before meals..."></textarea>
+            <button type="submit" class="qa-btn">💾 Save Orders</button>
+          </form>
+        </div>
+
+        <!-- VITALS -->
+
+        <!-- VITALS -->
+        <div class="card">
+          <div class="card-header-row">
+            <h3 class="card-title">Latest Vitals &amp; Checkups</h3>
+            <button class="qa-btn small" id="refreshVitalsBtn">🔄 Refresh</button>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Recorded At</th>
+                  <th>Heart Rate</th>
+                  <th>Blood Pressure</th>
+                  <th>Temperature</th>
+                  <th>Blood Sugar</th>
+                  <th>Nurse Notes</th>
+                </tr>
+              </thead>
+              <tbody id="vitalsTableBody">
+                <tr><td colspan="6" class="muted-text">Loading vitals...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PRESCRIPTIONS -->
+        <div class="card">
+          <h3 class="card-title">Add Prescription</h3>
+          <form id="prescriptionForm" class="inline-form">
+            <input type="text" id="medicineName" placeholder="Medicine Name" required />
+            <input type="text" id="medicineDosage" placeholder="Dosage (e.g. 500mg)" required />
+            <input type="text" id="medicineFrequency" placeholder="Frequency (e.g. 2x daily)" required />
+            <input type="text" id="medicineInstructions" placeholder="Instructions (optional)" />
+            <button type="submit" class="qa-btn">➕ Add to Daily Routine</button>
+          </form>
+
+          <h4 class="sub-title">Current Prescriptions</h4>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Medicine</th>
+                  <th>Dosage</th>
+                  <th>Frequency</th>
+                  <th>Instructions</th>
+                  <th>Prescribed On</th>
+                </tr>
+              </thead>
+              <tbody id="prescriptionsTableBody">
+                <tr><td colspan="5" class="muted-text">Loading prescriptions...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- GUARDIAN CONTACT / SMS -->
+        <div class="card">
+          <h3 class="card-title">Guardian Contact / Emergency SMS</h3>
+          <p class="muted-text">Guardian: <strong id="guardianNameDisplay">—</strong> &nbsp;|&nbsp; Phone: <strong id="guardianPhoneDisplay">—</strong></p>
+
+          <form id="guardianForm" class="inline-form">
+            <select id="guardianUrgency">
+              <option value="Emergency">🚨 Emergency Alert</option>
+              <option value="Update">General Update</option>
+            </select>
+            <input type="text" id="guardianMessage" placeholder="Message to guardian" required />
+            <button type="submit" class="qa-btn danger-btn">📩 Send Message</button>
+          </form>
+
+          <h4 class="sub-title">Notification Log</h4>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Recipient Phone</th>
+                  <th>Status</th>
+                  <th>Error</th>
+                  <th>Sent At</th>
+                </tr>
+              </thead>
+              <tbody id="smsTableBody">
+                <tr><td colspan="4" class="muted-text">Loading notification log...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- DISCHARGE & PRESCRIPTION -->
+        <div class="card discharge-card">
+          <h3 class="card-title">Discharge Patient & Generate Rx</h3>
+          <p class="muted-text">Fill in the prescription details before printing the discharge summary.</p>
+          
+          <div class="form-group" style="margin: 15px 0;">
+            <label style="font-weight: bold; display: block; margin-bottom: 10px;">Prescribed Medicines</label>
+            
+            <div id="medicationContainer">
+              <!-- Single Medicine Row -->
+              <div class="med-row" style="display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
+                <input type="text" class="rxMed" placeholder="Medicine (e.g., Paracetamol)" style="flex: 2; min-width: 150px; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+                <input type="text" class="rxTime" placeholder="Times (e.g., 1-0-1)" style="flex: 1; min-width: 100px; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+                <select class="rxMeal" style="flex: 1; min-width: 120px; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+                  <option value="After Meal">After Meal</option>
+                  <option value="Before Meal">Before Meal</option>
+                  <option value="With Meal">With Meal</option>
+                </select>
+              </div>
+            </div>
+            
+            <!-- NEW: Add Medicine Button -->
+            <button type="button" onclick="addMedicineRow()" style="padding: 6px 12px; border-radius: 4px; background: #eef7f4; color: #0F6B57; border: 1px dashed #0F6B57; cursor: pointer; font-size: 0.85rem; margin-bottom: 10px;">+ Add Another Medicine</button>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label style="font-weight: bold; display: block; margin-bottom: 5px;">Follow-up Instructions</label>
+            <input type="text" id="rxFollowUp" placeholder="e.g., Review in OPD after 1 week" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc;">
+          </div>
+
+          <button class="qa-btn danger-btn" id="dischargeBtn" style="width: 100%;">Print Rx & Discharge</button>
+        </div>
+      </section>
+
+      <!-- HIDDEN PRESCRIPTION PRINT TEMPLATE -->
+      <div id="printRxContainer" style="display: none;">
+        <div class="rx-header">
+          <h1 style="color: #0F6B57; margin-bottom: 5px; text-transform: uppercase;">CareBridge Hospital</h1>
+          <p style="margin: 0;"><strong>Dr. <span id="printDocName">Consulting Physician</span></strong></p>
+          <p style="margin: 0; color: #555;">Smart ICU & General Wards</p>
+        </div>
+        <hr style="border-top: 2px solid #0F6B57; margin: 20px 0;">
+        
+        <div class="rx-patient-info" style="display: flex; justify-content: space-between; margin-bottom: 30px;">
+          <p><strong>Patient Name:</strong> <span id="printPatName">__________</span></p>
+          <p><strong>Date:</strong> <span id="printDate">__________</span></p>
+        </div>
+        
+        <div class="rx-body" style="min-height: 350px;">
+          <h2 style="font-size: 2.5rem; font-style: italic; margin-bottom: 20px;">Rx</h2>
+          
+          <!-- Structured Medicine Table -->
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 1.1rem;">
+            <thead>
+              <tr style="border-bottom: 2px solid #333; text-align: left;">
+                <th style="padding: 10px 0;">Medicine</th>
+                <th style="padding: 10px 0;">Timing</th>
+                <th style="padding: 10px 0;">Instructions</th>
+              </tr>
+            </thead>
+            <tbody id="printMedTableBody">
+              <!-- JavaScript will insert the medicines here -->
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="rx-footer" style="margin-top: 30px;">
+          <p><strong>Follow-up Advice:</strong> <span id="printFollowUpText">_________________</span></p>
+          
+          <!-- Signature and Stamp Section -->
+          <div style="display: flex; justify-content: space-between; margin-top: 100px;">
+            <div style="text-align: center;">
+              <p>___________________________</p>
+              <p style="font-weight: bold; margin-top: 5px;">Hospital Stamp</p>
+            </div>
+            <div style="text-align: center;">
+              <p>___________________________</p>
+              <p style="font-weight: bold; margin-top: 5px;">Doctor's Signature</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="doctor.js"></script>
+</body>
+</html>

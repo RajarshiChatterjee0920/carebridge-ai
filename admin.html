@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CareBridge AI — Admin Dashboard</title>
+<link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+  <div class="admin-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-icon">🏥</span>
+        <span class="brand-name">CareBridge <span>AI</span></span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-section="overview">
+          <span class="nav-icon">📊</span> Overview
+        </button>
+        <button class="nav-item" data-section="patients">
+          <span class="nav-icon">🧑‍🤝‍🧑</span> Patient Management
+        </button>
+        <button class="nav-item" data-section="beds">
+          <span class="nav-icon">🛏️</span> Bed Management
+        </button>
+        <button class="nav-item" data-section="staff">
+          <span class="nav-icon">👩‍⚕️</span> Staff Management
+        </button>
+        <button class="nav-item" data-section="assignments">
+          <span class="nav-icon">🔗</span> Assignments
+        </button>
+        <button class="nav-item" data-section="logs">
+          <span class="nav-icon">📝</span> Activity Logs
+        </button>
+        <button class="nav-item" data-section="billing">
+          <span class="nav-icon">📄</span> Billing & Invoices
+        </button>
+        <button class="nav-item" data-section="settings">
+          <span class="nav-icon">⚙️</span> Settings
+        </button>
+      </nav>
+
+      <button id="logoutBtn" class="logout-btn">
+        <span class="nav-icon">🚪</span> Logout
+      </button>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <header class="topbar">
+        <div>
+          <h1>Administration Dashboard</h1>
+          <p class="subtitle">Hospital Operations &amp; Resource Management</p>
+        </div>
+        <div class="admin-id-badge">Logged in as <strong id="adminNameBadge">ADMIN001</strong></div>
+      </header>
+
+      <!-- ================= OVERVIEW SECTION ================= -->
+      <section id="overview" class="content-section active-section">
+        <div class="summary-grid">
+          <div class="summary-card">
+            <div class="summary-icon teal-bg">🧑‍🤝‍🧑</div>
+            <div>
+              <p class="summary-label">Total Patients</p>
+              <h2 id="statTotalPatients">0</h2>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon red-bg">🛏️</div>
+            <div>
+              <p class="summary-label">Occupied Beds</p>
+              <h2 id="statOccupiedBeds">0</h2>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon green-bg">✅</div>
+            <div>
+              <p class="summary-label">Available Beds</p>
+              <h2 id="statAvailableBeds">0</h2>
+            </div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-icon blue-bg">👩‍⚕️</div>
+            <div>
+              <p class="summary-label">Active Staff</p>
+              <h2 id="statActiveStaff">0</h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Quick Actions</h3>
+          <div class="quick-actions">
+            <button class="qa-btn" data-modal="modalAdmit">➕ Admit Patient</button>
+            <button class="qa-btn" data-modal="modalNurse">➕ Add Nurse</button>
+            <button class="qa-btn" data-modal="modalDoctor">➕ Add Doctor</button>
+            <button class="qa-btn" data-modal="modalBed">➕ Add Bed</button>
+            <button class="qa-btn" data-modal="modalAssign">🔗 Assign Patient</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Recent Admissions</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Patient ID</th><th>Patient Name</th><th>Department</th><th>Ward</th><th>Bed</th><th>Doctor</th><th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="recentAdmissionsBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Bed Management</h3>
+          <div id="bedOverviewGrid" class="bed-grid"></div>
+        </div>
+      </section>
+
+      <!-- ================= PATIENT MANAGEMENT ================= -->
+      <section id="patients" class="content-section">
+        <div class="card">
+          <div class="card-header-row">
+            <h3 class="card-title">All Patients</h3>
+            <button class="qa-btn small" data-modal="modalAdmit">➕ Admit Patient</button>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Patient ID</th><th>Name</th><th>Age</th><th>Gender</th>
+                  <th>Department</th><th>Ward</th><th>Bed</th><th>Doctor</th><th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="patientsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= BED MANAGEMENT ================= -->
+      <section id="beds" class="content-section">
+        <div class="card">
+          <div class="card-header-row">
+            <h3 class="card-title">Bed Management</h3>
+            <button class="qa-btn small" data-modal="modalBed">➕ Add Bed</button>
+          </div>
+          <div id="bedDetailGrid" class="bed-grid"></div>
+        </div>
+      </section>
+
+      <!-- ================= STAFF MANAGEMENT ================= -->
+      <section id="staff" class="content-section">
+        <div class="card">
+          <div class="card-header-row">
+            <h3 class="card-title">Staff Directory</h3>
+            <div class="row-btns">
+              <button class="qa-btn small" data-modal="modalNurse">➕ Add Nurse</button>
+              <button class="qa-btn small" data-modal="modalDoctor">➕ Add Doctor</button>
+            </div>
+          </div>
+          <!-- HR Promo Action Bar (Visual Mockup for Demo) -->
+        <div style="background: #eef7f4; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; border: 1px dashed #0F6B57;">
+          <span style="font-weight: 600; color: #0F6B57; margin-right: 10px; display: flex; align-items: center;">HR Quick Actions:</span>
+          <button class="btn btn-outline small" onclick="alert('CareBridge Enterprise: Attendance tracking module unlocks in v2.0.')">📋 Mark Attendance</button>
+          <button class="btn btn-outline small" onclick="alert('CareBridge Enterprise: Payroll module unlocked with Financial tier.')">💰 Generate Payslip</button>
+          <button class="btn btn-outline small" onclick="alert('CareBridge Enterprise: Access restricted to HR Superadmin.')">⚖️ Disciplinary Action</button>
+          <button class="btn btn-outline small" onclick="alert('CareBridge Enterprise: Access restricted to HR Superadmin.')">🔄 Update Role/Salary</button>
+        </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>Employee ID</th><th>Name</th><th>Role</th><th>Department</th><th>Status</th></tr>
+              </thead>
+              <tbody id="staffTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= ASSIGNMENTS ================= -->
+      
+<section id="assignments" class="content-section">
+  <div class="card">
+    
+    <!-- Header Row with Title, Search Bar, and Button -->
+    <div class="card-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+      <h3 class="card-title">Patient Assignments</h3>
+      
+      <!-- NEW SEARCH BAR -->
+      <input type="text" id="searchAssignments" placeholder="Search patient name or ID..." style="padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; width: 250px;">
+      
+      <button class="qa-btn small" data-modal="modalAssign">Assign Patient</button>
+    </div>
+    
+    <!-- Assignments Table -->
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Patient</th>
+            <th>Bed</th>
+            <th>Doctor</th>
+            <th>Nurse</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="assignmentsTableBody">
+          <tr><td colspan="5" style="text-align: center;">Loading assignments...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+      <!-- ================= ACTIVITY LOGS ================= -->
+      <section id="logs" class="content-section">
+        <div class="card">
+          <h3 class="card-title">Recent Activity</h3>
+          <ul id="activityLogList" class="activity-list"></ul>
+        </div>
+      </section>
+
+      <!-- ================= BILLING & INVOICES ================= -->
+      <section id="billing" class="content-section">
+        <div class="card">
+          <h3 class="card-title">Create Custom Patient Bill</h3>
+          <p class="muted-text">Select a discharged patient to generate an official hospital invoice.</p>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; background: #f9f9f9; padding: 20px; border-radius: 8px;">
+            <div style="grid-column: span 2;">
+              <label style="display:block; font-weight:bold; margin-bottom:5px;">Select Discharged Patient:</label>
+              <select id="billPatientSelect" style="width:100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                <option value="">-- Choose Patient --</option>
+              </select>
+            </div>
+            <div>
+              <label style="display:block; font-weight:bold; margin-bottom:5px;">Room & Nursing Charges (₹):</label>
+              <input type="number" id="billRoom" value="4500" style="width:100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" />
+            </div>
+            <div>
+              <label style="display:block; font-weight:bold; margin-bottom:5px;">Doctor Consultation (₹):</label>
+              <input type="number" id="billConsultation" value="2000" style="width:100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" />
+            </div>
+            <div>
+              <label style="display:block; font-weight:bold; margin-bottom:5px;">Pharmacy & Tests (₹):</label>
+              <input type="number" id="billPharmacy" value="1250" style="width:100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;" />
+            </div>
+          </div>
+          <button id="generateCustomBillBtn" class="qa-btn" style="background: #0F6B57; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">🖨️ Generate Custom Bill PDF</button>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+          <h3 class="card-title">Discharged Patients List</h3>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr><th>Patient ID</th><th>Name</th><th>Department</th><th>Status</th><th>Action</th></tr>
+              </thead>
+              <tbody id="dischargedTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+      <!-- HIDDEN BILL PRINT TEMPLATE -->
+      <div id="printBillContainer" style="display: none;">
+        <div style="text-align: center; border-bottom: 2px solid #0F6B57; padding-bottom: 10px; margin-bottom: 20px;">
+          <h1 style="color: #0F6B57; margin: 0; text-transform: uppercase;">CareBridge Hospital</h1>
+          <p style="margin: 0; font-size: 1.2rem;">Official Patient Invoice</p>
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 1.1rem;">
+          <p><strong>Patient Name:</strong> <span id="outPatientName"></span></p>
+          <p><strong>Date:</strong> <span id="outDate"></span></p>
+        </div>
+        
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 1.1rem;">
+          <thead>
+            <tr style="border-bottom: 2px solid #333; text-align: left;">
+              <th style="padding: 10px 0;">Description</th>
+              <th style="padding: 10px 0; text-align: right;">Amount (₹)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 12px 0;">Room & Nursing Charges</td>
+              <td style="padding: 12px 0; text-align: right;" id="outRoom"></td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 12px 0;">Doctor Consultation</td>
+              <td style="padding: 12px 0; text-align: right;" id="outConsult"></td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 12px 0;">Pharmacy & Tests</td>
+              <td style="padding: 12px 0; text-align: right;" id="outPharm"></td>
+            </tr>
+            <tr style="border-top: 2px solid #333; font-weight: bold; font-size: 1.3rem;">
+              <td style="padding: 15px 0;">Total Amount</td>
+              <td style="padding: 15px 0; text-align: right;" id="outTotal"></td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <div style="text-align: right; margin-top: 60px;">
+          <p>___________________________</p>
+          <p><strong>Authorized Signatory</strong></p>
+        </div>
+      </div>
+
+      <!-- ================= SETTINGS ================= -->
+      <section id="settings" class="content-section">
+        <div class="card">
+          <h3 class="card-title">Admin Settings</h3>
+          <p class="muted-text">Hospital: <strong>CareBridge General Hospital</strong></p>
+          <p class="muted-text">Admin ID: <strong>ADMIN001</strong></p>
+          <p class="muted-text">This is a hackathon prototype. Settings management will be added in a later stage.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ================= MODALS (WITH REAL DROPDOWNS) ================= -->
+  
+  <div class="modal-overlay" id="modalAdmit">
+    <div class="modal-box">
+      <h3>Admit Patient</h3>
+      <input id="admitPatientId" type="text" placeholder="Patient ID" />
+      <input id="admitFullName" type="text" placeholder="Full Name" />
+      <input id="admitAge" type="number" placeholder="Age" />
+      <select id="admitGender">
+        <option value="">Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+      <input id="admitPhone" type="text" placeholder="Patient Phone" />
+      
+      <select id="admitDepartment"><option value="">Select Department</option></select>
+      <select id="admitWard"><option value="">Select Ward</option></select>
+      <select id="admitBed"><option value="">Select Bed (Available Only)</option></select>
+      <select id="admitDoctor"><option value="">Assign Doctor</option></select>
+      
+      <input id="admitGuardianName" type="text" placeholder="Guardian Name" />
+      <input id="admitGuardianPhone" type="text" placeholder="Guardian Phone" />
+      <p id="admitError" class="form-error"></p>
+      <div class="modal-actions">
+        <button class="qa-btn" type="button" id="savePatientBtn">Admit Patient</button>
+        <button class="qa-btn secondary-btn" type="button" onclick="closeModal('modalAdmit')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalNurse">
+    <div class="modal-box">
+      <h3>Add Nurse</h3>
+      <input id="nurseEmployeeId" type="text" placeholder="Employee ID" />
+      <input id="nurseFullName" type="text" placeholder="Full Name" />
+      <select id="nurseDepartment"><option value="">Select Department</option></select>
+      <input id="nursePhone" type="text" placeholder="Phone Number" />
+      <input id="nursePasswordInput" type="password" placeholder="Create Password *" />
+      <p id="nurseError" class="form-error"></p>
+      <div class="modal-actions">
+        <button class="qa-btn" type="button" id="saveNurseBtn">Add Nurse</button>
+        <button class="qa-btn secondary-btn" type="button" onclick="closeModal('modalNurse')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalDoctor">
+    <div class="modal-box">
+      <h3>Add Doctor</h3>
+      <input id="doctorEmployeeId" type="text" placeholder="Employee ID" />
+      <input id="doctorFullName" type="text" placeholder="Full Name" />
+      <select id="doctorDepartment"><option value="">Select Department</option></select>
+      <input id="doctorPhone" type="text" placeholder="Phone Number" />
+      <input id="doctorPasswordInput" type="password" placeholder="Create Password *" />
+      <p id="doctorError" class="form-error"></p>
+      <div class="modal-actions">
+        <button class="qa-btn" type="button" id="saveDoctorBtn">Add Doctor</button>
+        <button class="qa-btn secondary-btn" type="button" onclick="closeModal('modalDoctor')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalBed">
+    <div class="modal-box">
+      <h3>Add Bed</h3>
+      <input id="bedNumber" type="text" placeholder="Bed Number (Must type unique ID)" />
+      <select id="bedWard"><option value="">Select Ward</option></select>
+      <select id="bedDepartment"><option value="">Select Department</option></select>
+      <p id="bedError" class="form-error"></p>
+      <div class="modal-actions">
+        <button class="qa-btn" type="button" id="saveBedBtn">Add Bed</button>
+        <button class="qa-btn secondary-btn" type="button" onclick="closeModal('modalBed')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalAssign">
+    <div class="modal-box">
+      <h3>Assign Patient</h3>
+      <select id="assignPatient"><option value="">Select Patient</option></select>
+      <select id="assignDoctor"><option value="">Select Doctor</option></select>
+      <select id="assignNurse"><option value="">Select Nurse</option></select>
+      <select id="assignBed"><option value="">Select Bed</option></select>
+      <p id="assignError" class="form-error"></p>
+      <div class="modal-actions">
+        <button class="qa-btn" type="button" id="saveAssignmentBtn">Assign</button>
+        <button class="qa-btn secondary-btn" type="button" onclick="closeModal('modalAssign')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

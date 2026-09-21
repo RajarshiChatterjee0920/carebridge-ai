@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareBridge AI — Secure Staff Access</title>
+
+  <!-- Same font pairing as the rest of the product -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header">
+    <div class="header-inner">
+
+      <a href="index.html" class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" width="40" height="40">
+            <circle cx="24" cy="24" r="23" fill="#0F6B57"></circle>
+            <polyline points="8,25 15,25 18,17 23,32 27,20 30,25 40,25"
+                      fill="none" stroke="#F4FBF9" stroke-width="2.6"
+                      stroke-linecap="round" stroke-linejoin="round"></polyline>
+          </svg>
+        </span>
+        <span class="brand-text">
+          <span class="brand-name">CareBridge AI</span>
+          <span class="brand-tagline">Secure Staff Access</span>
+        </span>
+      </a>
+
+      <a href="index.html" class="btn btn-outline back-home-btn">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back to Home
+      </a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============ PAGE INTRO ============ -->
+    <section class="page-intro">
+      <div class="section-inner">
+        <span class="eyebrow-badge">
+          <span class="eyebrow-dot" aria-hidden="true"></span>
+          STAFF ACCESS
+        </span>
+        <h1>Secure Staff Access</h1>
+        <p class="page-intro-lede">
+          Choose your portal to continue. Each role sees only the tools built for its part of the patient journey.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ ROLE SELECTION + PANELS ============ -->
+    <section class="login-section">
+      <div class="section-inner">
+
+        <!-- Three role "tabs" — an accessible tab pattern rather than
+             plain buttons, since exactly one portal is shown at a time. -->
+        <div class="role-tabs" role="tablist" aria-label="Choose a staff portal">
+
+          <button
+            type="button"
+            class="role-tab"
+            id="adminTab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="adminPanel"
+            tabindex="-1"
+          >
+            <span class="role-tab-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24"><rect x="3" y="8" width="18" height="12" rx="2" fill="none" stroke="#0F6B57" stroke-width="1.8"/><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" fill="none" stroke="#0F6B57" stroke-width="1.8"/><path d="M3 13h18" stroke="#0F6B57" stroke-width="1.8"/></svg>
+            </span>
+            <span class="role-tab-text">
+              <span class="role-tab-title">Administration</span>
+              <span class="role-tab-desc">Manage hospital operations, patient records, and staff access</span>
+            </span>
+            <span class="role-tab-check" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="13" height="13"><path d="M4 12.5 9 17l11-11" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </button>
+
+          <button
+            type="button"
+            class="role-tab"
+            id="nurseTab"
+            role="tab"
+            aria-selected="true"
+            aria-controls="nursePanel"
+          >
+            <span class="role-tab-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24"><path d="M3 12h4l2-6 4 12 2-6h6" fill="none" stroke="#0F6B57" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="role-tab-text">
+              <span class="role-tab-title">Nurse Portal</span>
+              <span class="role-tab-desc">Record bedside observations and routine patient checks</span>
+            </span>
+            <span class="role-tab-check" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="13" height="13"><path d="M4 12.5 9 17l11-11" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </button>
+
+          <button
+            type="button"
+            class="role-tab"
+            id="doctorTab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="doctorPanel"
+            tabindex="-1"
+          >
+            <span class="role-tab-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 3a5 5 0 0 1 5 5c0 2-1 3-1 4.5V15h-8v-2.5C7 11 6 10 6 8a5 5 0 0 1 5-5Z" fill="none" stroke="#0F6B57" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 18h5M10 21h4" stroke="#0F6B57" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </span>
+            <span class="role-tab-text">
+              <span class="role-tab-title">Doctor Portal</span>
+              <span class="role-tab-desc">Review patient trends, clinical summaries, and assigned cases</span>
+            </span>
+            <span class="role-tab-check" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="13" height="13"><path d="M4 12.5 9 17l11-11" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </button>
+
+        </div>
+
+        <!-- ADMINISTRATION PANEL — fully working demo login -->
+        <div class="role-panel" id="adminPanel" role="tabpanel" aria-labelledby="adminTab" hidden>
+          <div class="login-card">
+            <h2 class="login-card-title">Administrator Sign In</h2>
+            <p class="login-card-lede">Enter your Employee ID and password to open hospital administration tools.</p>
+
+            <form id="adminLoginForm" class="login-form" novalidate>
+              <div
+                class="form-error"
+                id="adminLoginError"
+                role="alert"
+                aria-live="polite"
+                hidden
+              ></div>
+
+              <div class="field">
+                <label for="adminId">Employee ID / Username <span class="required-mark">*</span></label>
+                <input type="text" id="adminId" name="adminId" autocomplete="username" required />
+              </div>
+
+              <div class="field">
+                <label for="adminPassword">Password <span class="required-mark">*</span></label>
+                <input type="password" id="adminPassword" name="adminPassword" autocomplete="current-password" required />
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-large btn-full">Sign In</button>
+            </form>
+
+            <div class="demo-hint">
+              <span class="demo-hint-label">Demo access</span>
+              <span class="demo-hint-row">Employee ID: <code>ADMIN001</code></span>
+              <span class="demo-hint-row">Password: <code>admin2026</code></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- NURSE PORTAL PANEL — fully working demo login (unchanged) -->
+        <div class="role-panel" id="nursePanel" role="tabpanel" aria-labelledby="nurseTab">
+          <div class="login-card">
+            <h2 class="login-card-title">Nurse Sign In</h2>
+            <p class="login-card-lede">Enter your Nurse ID and password to open bedside monitoring.</p>
+
+            <form id="nurseLoginForm" class="login-form" novalidate>
+              <div
+                class="form-error"
+                id="loginError"
+                role="alert"
+                aria-live="polite"
+                hidden
+              ></div>
+
+              <div class="field">
+                <label for="nurseId">Nurse ID <span class="required-mark">*</span></label>
+                <input type="text" id="nurseId" name="nurseId" autocomplete="username" required />
+              </div>
+
+              <div class="field">
+                <label for="nursePassword">Password <span class="required-mark">*</span></label>
+                <input type="password" id="nursePassword" name="nursePassword" autocomplete="current-password" required />
+              </div>
+<button type="submit" class="btn btn-primary btn-large btn-full">Sign In</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- DOCTOR PORTAL PANEL — fully working demo login.
+             doctor.html doesn't exist yet; signing in simply redirects
+             there, the same way nurse.html once did before it was built. -->
+        <div class="role-panel" id="doctorPanel" role="tabpanel" aria-labelledby="doctorTab" hidden>
+          <div class="login-card">
+            <h2 class="login-card-title">Doctor Sign In</h2>
+            <p class="login-card-lede">Enter your Doctor ID and password to open clinical review tools.</p>
+
+            <form id="doctorLoginForm" class="login-form" novalidate>
+              <div
+                class="form-error"
+                id="doctorLoginError"
+                role="alert"
+                aria-live="polite"
+                hidden
+              ></div>
+
+              <div class="field">
+                <label for="doctorId">Doctor ID <span class="required-mark">*</span></label>
+                <input type="text" id="doctorId" name="doctorId" autocomplete="username" required />
+              </div>
+
+              <div class="field">
+                <label for="doctorPassword">Password <span class="required-mark">*</span></label>
+                <input type="password" id="doctorPassword" name="doctorPassword" autocomplete="current-password" required />
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-large btn-full">Sign In</button>
+            </form>
+
+          
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand-block">
+        <span class="footer-brand">CareBridge AI</span>
+        <span class="footer-platform">Smart Patient Monitoring &amp; Clinical Assistance Platform</span>
+      </div>
+      <span class="footer-tagline">Prototype for Smart India Hackathon</span>
+    </div>
+  </footer>
+
+  <!-- Added Supabase so we can verify real staff -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="login.js"></script>
+</body>
+</html>

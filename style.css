@@ -1,0 +1,1293 @@
+/* =======================================================================
+   CareBridge AI — Stylesheet
+   Beginner-friendly notes are left throughout so it's easy to follow.
+   ======================================================================= */
+
+/* -----------------------------------------------------------------------
+   1. DESIGN TOKENS
+   ----------------------------------------------------------------------- */
+:root {
+  /* Colors */
+  --color-ink: #0F221C;          /* main text color, deep teal-black */
+  --color-bg: #F5FAF8;           /* very light mint-white page background */
+  --color-surface: #FFFFFF;      /* solid card background */
+  --color-primary: #0F6B57;      /* deep teal/emerald, primary accent */
+  --color-primary-dark: #0A4C3D;
+  --color-emerald: #1FAE82;      /* brighter emerald for glows/status */
+  --color-amber: #C68A2E;        /* warm accent for the disclaimer note */
+  --color-muted: #57685F;        /* secondary/muted text */
+  --color-border: #DCE8E3;       /* subtle borders/dividers */
+
+  /* Glass surfaces, used for the floating hero panels */
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.7);
+
+  /* Typography */
+  --font-display: 'Manrope', 'Segoe UI', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Layout */
+  --max-width: 1180px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --shadow-soft: 0 10px 30px rgba(15, 34, 28, 0.08);
+  --shadow-strong: 0 30px 60px rgba(15, 34, 28, 0.16);
+}
+
+/* -----------------------------------------------------------------------
+   2. RESET / BASE STYLES
+   ----------------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden; /* the floating hero panels sit slightly outside their box */
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.18;
+  margin: 0 0 16px;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0 0 16px;
+  max-width: 62ch;
+}
+
+a {
+  color: inherit;
+}
+
+ul, ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Respect users who prefer less motion: turns off every animation,
+   transition, and the mouse-tracking tilt effect added in script.js */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--color-emerald);
+  outline-offset: 2px;
+}
+
+.section-inner,
+.header-inner,
+.hero-inner,
+.footer-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* -----------------------------------------------------------------------
+   3. SHARED SECTION HEADING STYLES
+   ----------------------------------------------------------------------- */
+.section-eyebrow {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  color: var(--color-primary);
+  margin-bottom: 10px;
+}
+
+.section-inner h2 {
+  font-size: clamp(1.7rem, 2.8vw, 2.3rem);
+  max-width: 20ch;
+}
+
+.section-lede {
+  color: var(--color-muted);
+  font-size: 1.02rem;
+  margin-bottom: 44px;
+}
+
+/* -----------------------------------------------------------------------
+   4. SCROLL-REVEAL (used across several sections)
+   Elements start slightly lower and transparent, then settle into place
+   once script.js's IntersectionObserver adds the "in-view" class.
+   ----------------------------------------------------------------------- */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal-on-scroll.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* -----------------------------------------------------------------------
+   5. BUTTONS
+   ----------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #FFFFFF;
+  box-shadow: 0 12px 24px rgba(15, 107, 87, 0.25);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+  box-shadow: 0 16px 30px rgba(15, 107, 87, 0.32);
+}
+
+.btn-outline {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: var(--color-border);
+  color: var(--color-ink);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-large {
+  padding: 15px 30px;
+  font-size: 1rem;
+}
+
+/* -----------------------------------------------------------------------
+   6. HEADER
+   ----------------------------------------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(245, 250, 248, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--color-ink);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.brand-tagline {
+  font-size: 0.76rem;
+  color: var(--color-muted);
+}
+
+.main-nav {
+  display: flex;
+  gap: 26px;
+  margin-left: auto;
+  margin-right: 24px;
+}
+
+.main-nav a {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.93rem;
+  color: var(--color-ink);
+  transition: color 0.15s ease;
+}
+
+.main-nav a:hover {
+  color: var(--color-primary);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 38px;
+  height: 38px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.menu-toggle span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin: 0 auto;
+  background: var(--color-ink);
+}
+
+/* Hidden by default. The HTML `hidden` attribute would normally take
+   care of this on its own, but a later rule that sets `display` on the
+   same element always overrides the browser's built-in [hidden] rule —
+   so we make the "closed" state explicit here, and only switch to
+   display:flex when the hidden attribute is NOT present. This is what
+   actually makes JavaScript's `mobileMenu.hidden = false/true` work. */
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px 24px 24px;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+
+.mobile-menu:not([hidden]) {
+  display: flex;
+}
+
+.mobile-menu a {
+  text-decoration: none;
+  color: var(--color-ink);
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+/* -----------------------------------------------------------------------
+   7. HERO
+   ----------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  padding: 76px 0 96px;
+  overflow: hidden;
+}
+
+/* Soft radial glow behind the whole hero, purely decorative */
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -220px;
+  right: -160px;
+  width: 640px;
+  height: 640px;
+  background: radial-gradient(circle, rgba(31, 174, 130, 0.16), transparent 70%);
+  z-index: 0;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.eyebrow-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: rgba(15, 107, 87, 0.08);
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 22px;
+}
+
+.eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-emerald);
+}
+
+.hero h1 {
+  font-size: clamp(2.1rem, 3.6vw, 2.9rem);
+  max-width: 15ch;
+}
+
+.hero-lede {
+  color: var(--color-muted);
+  font-size: 1.08rem;
+  max-width: 46ch;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+/* --- Hero visual stage: the floating 3D-style dashboard --- */
+.hero {
+  position: relative;
+  padding: 76px 0 96px;
+  overflow: hidden;
+}
+
+/* Soft radial glow behind the whole hero, purely decorative */
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -220px;
+  right: -160px;
+  width: 640px;
+  height: 640px;
+  background: radial-gradient(circle, rgba(31, 174, 130, 0.16), transparent 70%);
+  z-index: 0;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.eyebrow-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: rgba(15, 107, 87, 0.08);
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 22px;
+}
+
+.eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-emerald);
+}
+
+.hero h1 {
+  font-size: clamp(2.1rem, 3.6vw, 2.9rem);
+  max-width: 15ch;
+}
+
+.hero-lede {
+  color: var(--color-muted);
+  font-size: 1.08rem;
+  max-width: 46ch;
+}
+
+.hero-actions, .hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+/* ======================================================================
+   RIGHT SIDE: ANIMATED MEDICAL VISUAL 
+   ====================================================================== */
+.hero-visual-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.animated-medical-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 30px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 25px 50px rgba(15, 107, 87, 0.15);
+  border: 1px solid rgba(15, 107, 87, 0.1);
+  /* Floats the entire card smoothly */
+  animation: floatContainer 6s ease-in-out infinite;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.live-indicator {
+  width: 12px;
+  height: 12px;
+  background-color: #ff4757;
+  border-radius: 50%;
+  /* Creates a red recording pulse */
+  animation: pulseRed 1.5s infinite;
+}
+
+.card-title {
+  font-weight: 600;
+  color: #0F6B57;
+  font-size: 1.1rem;
+}
+
+.ecg-container {
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.animated-ecg {
+  width: 100%;
+  height: 80px;
+  fill: none;
+  stroke: #0F6B57;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  /* Animates the drawing of the line */
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawEcg 3s linear infinite;
+}
+
+.vitals-badges {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.vital-badge {
+  background: #f4fbf9;
+  border-radius: 12px;
+  padding: 15px 10px;
+  flex: 1;
+  text-align: center;
+  border: 1px solid #e0f2ec;
+}
+
+.vital-label {
+  display: block;
+  font-size: 0.8rem;
+  color: #555;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.vital-value {
+  display: block;
+  font-size: 1.3rem;
+  color: #0F6B57;
+  font-weight: 800;
+}
+
+/* --- KEYFRAMES FOR ANIMATIONS --- */
+@keyframes floatContainer {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes pulseRed {
+  0% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 71, 87, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
+}
+
+@keyframes drawEcg {
+  0% { stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; }
+}
+
+/* Independent subtle movements for the vital badges */
+.pulse-slow { animation: scalePulse 3s infinite alternate; }
+.float-delay-1 { animation: floatSmall 4s ease-in-out infinite 1s; }
+.float-delay-2 { animation: floatSmall 4s ease-in-out infinite 2s; }
+
+@keyframes scalePulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.03); }
+}
+
+@keyframes floatSmall {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Hide on mobile to keep text readable */
+@media (max-width: 768px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+  }
+  .hero-visual-container { 
+    display: none; 
+  }
+}
+
+/* --- Small floating cards layered around the dashboard --- */
+.float-card {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-soft);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--color-ink);
+  animation: floatY 6s ease-in-out infinite;
+}
+
+.float-icon {
+  display: inline-flex;
+}
+
+.float-card-1 {
+  top: 4%;
+  left: -6%;
+  animation-delay: 0s;
+}
+
+.float-card-2 {
+  top: 46%;
+  right: -10%;
+  animation-delay: 1.4s;
+}
+
+.float-card-3 {
+  bottom: 2%;
+  left: 2%;
+  animation-delay: 2.8s;
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
+}
+
+/* -----------------------------------------------------------------------
+   8. HOW IT WORKS
+   ----------------------------------------------------------------------- */
+.how-it-works {
+  padding: 88px 0;
+}
+
+.flow-steps {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.flow-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  flex: 1;
+  position: relative;
+  padding: 26px 14px;
+  border-radius: var(--radius-md);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.flow-step:hover {
+  transform: translateY(-6px);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.flow-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 60px;
+  left: 62%;
+  width: 76%;
+  height: 2px;
+  background: var(--color-border);
+}
+
+.flow-number {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--color-emerald);
+  letter-spacing: 0.04em;
+}
+
+.flow-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(15, 107, 87, 0.08);
+  z-index: 1;
+}
+
+.flow-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  max-width: 13ch;
+}
+
+/* -----------------------------------------------------------------------
+   9. CORE MODULES
+   ----------------------------------------------------------------------- */
+.modules {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding: 88px 0;
+}
+
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.module-card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.module-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-soft);
+  border-color: rgba(15, 107, 87, 0.3);
+}
+
+.module-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(15, 107, 87, 0.1);
+  margin-bottom: 18px;
+}
+
+.module-card h3 {
+  font-size: 1.15rem;
+  margin-bottom: 8px;
+}
+
+.module-card p {
+  color: var(--color-muted);
+  font-size: 0.94rem;
+  margin-bottom: 0;
+}
+
+/* Guardian Connect highlight banner beneath the three main modules */
+.feature-banner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: linear-gradient(120deg, var(--color-primary), var(--color-primary-dark));
+  border-radius: var(--radius-lg);
+  padding: 26px 30px;
+  color: #F4FBF9;
+}
+
+.feature-banner-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.14);
+  flex-shrink: 0;
+}
+
+.feature-banner-tag {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.feature-banner-text p {
+  margin: 0;
+  color: rgba(244, 251, 249, 0.85);
+  font-size: 0.94rem;
+}
+
+/* -----------------------------------------------------------------------
+   10. AI CLARITY SECTION
+   ----------------------------------------------------------------------- */
+.ai-clarity {
+  padding: 88px 0;
+}
+
+.transform-flow {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.transform-stage {
+  flex: 1;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 26px;
+  box-shadow: var(--shadow-soft);
+}
+
+.transform-tag {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--color-primary);
+  margin-bottom: 16px;
+}
+
+.transform-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.metric-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.metric-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metric-name {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+}
+
+.metric-trend {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.metric-trend small {
+  font-family: var(--font-body);
+  font-weight: 500;
+  color: var(--color-muted);
+}
+
+.transform-stage-processing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.processing-indicator {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.processing-indicator span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-emerald);
+  animation: pulseDot 1.2s ease-in-out infinite;
+}
+
+.processing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.processing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.3; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+.processing-caption {
+  font-size: 0.82rem;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+.transform-stage-summary {
+  background: rgba(15, 107, 87, 0.06);
+  border-color: rgba(15, 107, 87, 0.25);
+}
+
+.summary-text {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.disclaimer-note {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: rgba(198, 138, 46, 0.08);
+  border: 1px solid rgba(198, 138, 46, 0.3);
+  border-radius: var(--radius-md);
+  padding: 18px 22px;
+}
+
+.disclaimer-note p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #6B5220;
+}
+
+/* -----------------------------------------------------------------------
+   11. GUARDIAN SMS
+   ----------------------------------------------------------------------- */
+.guardian-sms {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding: 88px 0;
+}
+
+.guardian-inner {
+  display: grid;
+  grid-template-columns: 1fr 0.85fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.eyebrow-badge-light {
+  background: rgba(15, 107, 87, 0.08);
+}
+
+.guardian-copy h2 {
+  max-width: 16ch;
+}
+
+.guardian-copy p {
+  color: var(--color-muted);
+}
+
+/* --- Phone mockup --- */
+.phone-mockup {
+  display: flex;
+  justify-content: center;
+}
+
+.phone-frame {
+  width: 260px;
+  background: #10221D;
+  border-radius: 36px;
+  padding: 14px;
+  box-shadow: var(--shadow-strong);
+}
+
+.phone-notch {
+  width: 70px;
+  height: 18px;
+  background: #10221D;
+  border-radius: 0 0 12px 12px;
+  margin: 0 auto 8px;
+}
+
+.phone-screen {
+  background: var(--color-bg);
+  border-radius: 24px;
+  padding: 18px 14px;
+  min-height: 320px;
+}
+
+.phone-header {
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  margin-bottom: 18px;
+}
+
+.sms-bubble {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-soft);
+}
+
+.sms-sender {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-primary);
+}
+
+.sms-subject {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--color-muted);
+  margin-bottom: 10px;
+}
+
+.sms-body {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* -----------------------------------------------------------------------
+   12. SECURITY
+   ----------------------------------------------------------------------- */
+.security {
+  padding: 88px 0;
+}
+
+.security-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+.security-item {
+  padding: 24px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.security-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft);
+}
+
+.security-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(15, 107, 87, 0.08);
+  margin-bottom: 14px;
+}
+
+.security-item h3 {
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+.security-item p {
+  color: var(--color-muted);
+  font-size: 0.86rem;
+  margin: 0;
+}
+
+/* -----------------------------------------------------------------------
+   13. FOOTER
+   ----------------------------------------------------------------------- */
+.site-footer {
+  background: var(--color-ink);
+  color: #E9EDEB;
+  padding: 32px 0;
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.footer-brand-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.footer-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.footer-platform {
+  font-size: 0.82rem;
+  color: #B7C6C0;
+}
+
+.footer-tagline {
+  font-size: 0.85rem;
+  color: #B7C6C0;
+}
+
+/* -----------------------------------------------------------------------
+   14. DEMO MODAL
+   ----------------------------------------------------------------------- */
+/* Same fix as the mobile menu above: hidden by default, and only shown
+   when the [hidden] attribute has been removed by script.js. Without
+   this, the modal would render open the instant the page loads. */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 34, 28, 0.5);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+}
+
+.modal-overlay:not([hidden]) {
+  display: flex;
+}
+
+.modal-box {
+  position: relative;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: var(--shadow-strong);
+}
+
+.modal-box h3 {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+.modal-box p {
+  color: var(--color-muted);
+  margin-bottom: 0;
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-muted);
+}
+
+/* -----------------------------------------------------------------------
+   15. RESPONSIVE BREAKPOINTS
+   ----------------------------------------------------------------------- */
+
+/* Belt-and-braces: the mobile menu panel is only ever meant to be seen
+   below the 720px breakpoint (see .menu-toggle above, which is the only
+   way to open it). This forces it closed on wider screens even in the
+   edge case where it was left open on a phone and the window was then
+   resized wider than 720px. */
+@media (min-width: 721px) {
+  .mobile-menu {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1080px) {
+  .security-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 960px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-stage {
+    order: -1;
+    padding: 24px 20px 56px;
+  }
+
+  .dashboard-card {
+    transform: none; /* flatten the 3D tilt once stacked above the text */
+  }
+
+  .float-card-1 { left: 0; top: -2%; }
+  .float-card-2 { right: 0; }
+  .float-card-3 { left: 4%; }
+
+  .module-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .guardian-inner {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+
+  .phone-mockup {
+    margin-top: 8px;
+  }
+
+  .transform-flow {
+    flex-direction: column;
+  }
+
+  .transform-arrow {
+    transform: rotate(90deg);
+    align-self: center;
+  }
+}
+
+@media (max-width: 720px) {
+  .main-nav {
+    display: none;
+  }
+
+  .header-actions .btn-outline {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .module-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .flow-steps {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+  }
+
+  .flow-step {
+    flex-direction: row;
+    text-align: left;
+    justify-content: flex-start;
+    padding: 14px 16px;
+  }
+
+  .flow-step:not(:last-child)::after {
+    top: auto;
+    bottom: -10px;
+    left: 26px;
+    width: 2px;
+    height: 18px;
+  }
+
+  .flow-label {
+    max-width: none;
+  }
+
+  .security-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .phone-frame {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .float-card {
+    font-size: 0.72rem;
+    padding: 8px 12px;
+  }
+}

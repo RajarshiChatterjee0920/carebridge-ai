@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareBridge AI — Smart Patient Monitoring & Clinical Assistance</title>
+
+  <!-- Google Fonts: Manrope for headings/UI (clean, geometric, "startup" feel)
+       and Inter for body copy. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header">
+    <div class="header-inner">
+
+      <a href="#top" class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" width="40" height="40">
+            <circle cx="24" cy="24" r="23" fill="#0F6B57"></circle>
+            <polyline points="8,25 15,25 18,17 23,32 27,20 30,25 40,25"
+                      fill="none" stroke="#F4FBF9" stroke-width="2.6"
+                      stroke-linecap="round" stroke-linejoin="round"></polyline>
+          </svg>
+        </span>
+        <span class="brand-text">
+          <span class="brand-name">CareBridge AI</span>
+          <span class="brand-tagline">Smart Patient Monitoring &amp; Clinical Assistance</span>
+        </span>
+      </a>
+
+      <nav class="main-nav" aria-label="Primary">
+        <a href="#modules">Modules</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#ai-clarity">AI Insights</a>
+        <a href="#security">Security</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="btn btn-outline" id="staffLoginNavBtn" type="button">Staff Login</button>
+
+        <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu" hidden>
+      <a href="#modules">Modules</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#ai-clarity">AI Insights</a>
+      <a href="#security">Security</a>
+      <button class="btn btn-outline" id="staffLoginMobileBtn" type="button">Staff Login</button>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+  <div class="hero-inner">
+
+    <!-- LEFT SIDE: Text and Buttons -->
+    <div class="hero-copy">
+      <span class="eyebrow-badge">
+        <span class="eyebrow-dot" aria-hidden="true"></span>
+        SMART HOSPITAL INTELLIGENCE
+      </span>
+
+      <h1>One intelligent bridge between every bedside and every clinician.</h1>
+
+      <p class="hero-lede">
+        CareBridge AI transforms routine bedside observations into structured
+        digital records, actionable clinical summaries and timely guardian
+        updates.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#how-it-works" class="btn btn-primary btn-large" style="text-decoration: none;">Explore Features</a>
+        <a href="login.html" class="btn btn-outline btn-large" style="text-decoration: none;">Staff Login</a>
+      </div>
+    </div> <!-- Closes hero-copy -->
+
+    <!-- RIGHT SIDE: Floating Dashboard Visual -->
+    <!-- RIGHT SIDE: Animated Medical Theme Visual -->
+    <div class="hero-visual-container">
+      <div class="animated-medical-card">
+        
+        <div class="card-header">
+          <span class="live-indicator"></span>
+          <span class="card-title">Live Vitals · ICU Bed 14</span>
+        </div>
+
+        <!-- Animated Heartbeat SVG -->
+        <div class="ecg-container">
+          <svg viewBox="0 0 400 100" class="animated-ecg">
+            <polyline points="0,50 150,50 165,20 180,80 195,50 400,50" />
+          </svg>
+        </div>
+
+        <!-- Floating Vital Badges -->
+        <div class="vitals-badges">
+          <div class="vital-badge pulse-slow">
+            <span class="vital-label">Heart Rate</span>
+            <span class="vital-value">72 <small style="font-size: 0.6em;">bpm</small></span>
+          </div>
+          <div class="vital-badge float-delay-1">
+            <span class="vital-label">SpO₂</span>
+            <span class="vital-value">99 <small style="font-size: 0.6em;">%</small></span>
+          </div>
+          <div class="vital-badge float-delay-2">
+            <span class="vital-label">Temperature</span>
+            <span class="vital-value">98.4 <small style="font-size: 0.6em;">°F</small></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+</div> 
+           
+    </div>
+
+  </div> <!-- Closes hero-inner -->
+</section>
+
+    <!-- ============ HOW IT WORKS ============ -->
+    <section id="how-it-works" class="how-it-works">
+      <div class="section-inner">
+        <p class="section-eyebrow">Workflow</p>
+        <h2>From admission to guardian update, in five steps</h2>
+        <p class="section-lede">The same patient record moves through every role — nothing is re-typed along the way.</p>
+
+        <ol class="flow-steps">
+          <li class="flow-step reveal-on-scroll">
+            <span class="flow-number">01</span>
+            <span class="flow-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M7 4h10v3H7z" fill="none" stroke="#0F6B57" stroke-width="1.7"/><rect x="4" y="6" width="16" height="15" rx="1.5" fill="none" stroke="#0F6B57" stroke-width="1.7"/><path d="M12 11v6M9 14h6" stroke="#0F6B57" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </span>
+            <span class="flow-label">Patient Admission</span>
+          </li>
+          <li class="flow-step reveal-on-scroll">
+            <span class="flow-number">02</span>
+            <span class="flow-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M3 12h4l2-6 4 12 2-6h6" fill="none" stroke="#0F6B57" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="flow-label">Nurse Monitoring</span>
+          </li>
+          <li class="flow-step reveal-on-scroll">
+            <span class="flow-number">03</span>
+            <span class="flow-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22"><ellipse cx="12" cy="6" rx="7" ry="2.6" fill="none" stroke="#0F6B57" stroke-width="1.7"/><path d="M5 6v6c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6V6M5 12v6c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6v-6" fill="none" stroke="#0F6B57" stroke-width="1.7"/></svg>
+            </span>
+            <span class="flow-label">Central Patient Record</span>
+          </li>
+          <li class="flow-step reveal-on-scroll">
+            <span class="flow-number">04</span>
+            <span class="flow-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="3.2" fill="none" stroke="#0F6B57" stroke-width="1.7"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" stroke="#0F6B57" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </span>
+            <span class="flow-label">AI Clinical Summary</span>
+          </li>
+          <li class="flow-step reveal-on-scroll">
+            <span class="flow-number">05</span>
+            <span class="flow-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22"><path d="M4 5h16v11H8l-4 4V5Z" fill="none" stroke="#0F6B57" stroke-width="1.7" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="flow-label">Guardian SMS</span>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ CORE MODULES ============ -->
+    <section id="modules" class="modules">
+      <div class="section-inner">
+        <p class="section-eyebrow">Platform</p>
+        <h2>Three modules, one patient record</h2>
+        <p class="section-lede">Each role gets the view it actually needs.</p>
+
+        <div class="module-grid">
+          <article class="module-card reveal-on-scroll">
+            <span class="module-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="26" height="26"><path d="M7 4h10v3H7z" fill="none" stroke="#0F6B57" stroke-width="1.7"/><rect x="4" y="6" width="16" height="15" rx="1.5" fill="none" stroke="#0F6B57" stroke-width="1.7"/><path d="M12 11v6M9 14h6" stroke="#0F6B57" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </span>
+            <h3>Patient Admission</h3>
+            <p>Digitally register and assign patients with structured admission records.</p>
+          </article>
+
+          <article class="module-card reveal-on-scroll">
+            <span class="module-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="26" height="26"><path d="M3 12h4l2-6 4 12 2-6h6" fill="none" stroke="#0F6B57" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <h3>Nurse Monitoring</h3>
+            <p>Capture bedside vitals and observations in seconds.</p>
+          </article>
+
+          <article class="module-card reveal-on-scroll">
+            <span class="module-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="26" height="26"><path d="M12 3a5 5 0 0 1 5 5c0 2-1 3-1 4.5V15h-8v-2.5C7 11 6 10 6 8a5 5 0 0 1 5-5Z" fill="none" stroke="#0F6B57" stroke-width="1.7" stroke-linejoin="round"/><path d="M9.5 18h5M10 21h4" stroke="#0F6B57" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </span>
+            <h3>Doctor Intelligence</h3>
+            <p>Get concise patient trends and AI-assisted summaries before rounds.</p>
+          </article>
+        </div>
+
+        <div class="feature-banner reveal-on-scroll">
+          <span class="feature-banner-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="28" height="28"><path d="M4 5h16v11H8l-4 4V5Z" fill="none" stroke="#F4FBF9" stroke-width="1.7" stroke-linejoin="round"/></svg>
+          </span>
+          <div class="feature-banner-text">
+            <span class="feature-banner-tag">Guardian Connect</span>
+            <p>Automatically deliver approved patient updates through SMS.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ AI CLARITY SECTION ============ -->
+    <section id="ai-clarity" class="ai-clarity">
+      <div class="section-inner">
+        <p class="section-eyebrow">AI Insights</p>
+        <h2>From raw observations to clinical clarity.</h2>
+        <p class="section-lede">Vitals collected on rounds are condensed into a short, readable trend before every doctor visit.</p>
+
+        <div class="transform-flow">
+          <div class="transform-stage reveal-on-scroll">
+            <span class="transform-tag">Raw patient data</span>
+            <ul class="metric-list">
+              <li>
+                <span class="metric-name">Blood sugar</span>
+                <span class="metric-trend">220 → 170 → 138 <small>mg/dL</small></span>
+              </li>
+              <li>
+                <span class="metric-name">Blood pressure</span>
+                <span class="metric-trend">140/90 → 130/85 → 120/80</span>
+              </li>
+              <li>
+                <span class="metric-name">Temperature</span>
+                <span class="metric-trend">99.4°F → 98.8°F → 98.4°F</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="transform-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 4v14M6 12l6 6 6-6" fill="none" stroke="#0F6B57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+
+          <div class="transform-stage transform-stage-processing reveal-on-scroll">
+            <span class="transform-tag">AI processing</span>
+            <div class="processing-indicator">
+              <span></span><span></span><span></span>
+            </div>
+            <p class="processing-caption">Reading three consecutive vitals entries</p>
+          </div>
+
+          <div class="transform-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 4v14M6 12l6 6 6-6" fill="none" stroke="#0F6B57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+
+          <div class="transform-stage transform-stage-summary reveal-on-scroll">
+            <span class="transform-tag">Clinical summary</span>
+            <p class="summary-text">Patient trend indicates improving monitored parameters. Continue observation and review according to the treating physician's plan.</p>
+          </div>
+        </div>
+
+        <div class="disclaimer-note">
+          <span class="disclaimer-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="9" fill="none" stroke="#8A6A2A" stroke-width="1.7"/><path d="M12 8v5M12 16.2v.1" stroke="#8A6A2A" stroke-width="1.9" stroke-linecap="round"/></svg>
+          </span>
+          <p>CareBridge AI's summary is an assistive tool for reviewing trends. It does not diagnose conditions or prescribe treatment — all clinical decisions remain with the treating physician.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ GUARDIAN SMS ============ -->
+    <section class="guardian-sms">
+      <div class="section-inner guardian-inner">
+
+        <div class="guardian-copy">
+          <span class="eyebrow-badge eyebrow-badge-light">
+            <span class="eyebrow-dot" aria-hidden="true"></span>
+            AUTOMATED GUARDIAN COMMUNICATION
+          </span>
+          <h2>Families stay informed, without a phone call.</h2>
+          <p>Once a doctor reviews the day's vitals, an approved summary can be sent straight to the registered guardian — no manual follow-up call required.</p>
+        </div>
+
+        <div class="phone-mockup reveal-on-scroll" aria-hidden="true">
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="phone-header">Messages</div>
+              <div class="sms-bubble">
+                <span class="sms-sender">CareBridge AI</span>
+                <span class="sms-subject">Patient Update</span>
+                <p class="sms-body">
+                  Rahul Sharma's morning health check has been completed.
+                  <br /><br />
+                  BP: 120/80<br />
+                  Blood Sugar: 138 mg/dL<br />
+                  SpO₂: 98%
+                  <br /><br />
+                  Current Status: Stable
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============ SECURITY ============ -->
+    <section id="security" class="security">
+      <div class="section-inner">
+        <p class="section-eyebrow">Access &amp; Trust</p>
+        <h2>Built with access control in mind</h2>
+        <p class="section-lede">The prototype's role structure is designed so this can grow into a production-ready access model.</p>
+
+        <div class="security-grid">
+          <div class="security-item reveal-on-scroll">
+            <span class="security-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 3 4 6.5v5c0 5 3.4 8.7 8 9.5 4.6-.8 8-4.5 8-9.5v-5L12 3Z" fill="none" stroke="#0F6B57" stroke-width="1.7" stroke-linejoin="round"/></svg>
+            </span>
+            <h3>Role-Based Access</h3>
+            <p>Each user role sees only the tools and data relevant to their job — front desk, nursing, or doctors.</p>
+          </div>
+
+          <div class="security-item reveal-on-scroll">
+            <span class="security-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24"><rect x="4" y="5" width="16" height="15" rx="1.5" fill="none" stroke="#0F6B57" stroke-width="1.7"/><path d="M8 9h8M8 12.5h8M8 16h5" stroke="#0F6B57" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </span>
+            <h3>Secure Patient Records</h3>
+            <p>Patient information is organized in a single structured record instead of scattered paper files.</p>
+          </div>
+
+          <div class="security-item reveal-on-scroll">
+            <span class="security-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24"><path d="M4 20V10l8-5 8 5v10" fill="none" stroke="#0F6B57" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 20v-6h6v6" fill="none" stroke="#0F6B57" stroke-width="1.7" stroke-linejoin="round"/></svg>
+            </span>
+            <h3>Department-Level Permissions</h3>
+            <p>Access can be scoped by ward or department as the hospital's needs grow.</p>
+          </div>
+
+          <div class="security-item reveal-on-scroll">
+            <span class="security-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24"><path d="M9 4h6l1 3H8l1-3Z" fill="none" stroke="#0F6B57" stroke-width="1.7" stroke-linejoin="round"/><rect x="5" y="7" width="14" height="14" rx="1.5" fill="none" stroke="#0F6B57" stroke-width="1.7"/><path d="M9 12h6M9 16h6" stroke="#0F6B57" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </span>
+            <h3>Audit-Friendly Records</h3>
+            <p>Every entry is timestamped, making it easier to trace who recorded what and when.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand-block">
+        <span class="footer-brand">CareBridge AI</span>
+        <span class="footer-platform">Smart Patient Monitoring &amp; Clinical Assistance Platform</span>
+      </div>
+      <span class="footer-tagline">Prototype for Smart India Hackathon</span>
+    </div>
+  </footer>
+
+  <!-- ============ DEMO MODAL ============ -->
+  <div class="modal-overlay" id="demoModal" hidden>
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" id="modalClose" type="button" aria-label="Close">&times;</button>
+      <h3 id="modalTitle">Title goes here</h3>
+      <p id="modalBody">Body text goes here.</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
